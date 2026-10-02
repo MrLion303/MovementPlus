@@ -1,0 +1,38 @@
+plugins { id "net.minecraftforge.gradle" }
+base { archivesName = "MovementPlus-Forge-1.20.1" }
+minecraft {
+    mappings channel: "official", version: "1.20.1"
+    copyIdeResources = true
+    runs {
+        configureEach {
+            workingDirectory project.file("run")
+            property "forge.logging.markers", "REGISTRIES"
+            property "forge.logging.console.level", "debug"
+            mods { movementplus { source sourceSets.main } }
+        }
+        client {}
+        server {}
+    }
+}
+repositories { mavenCentral() }
+dependencies { minecraft "net.minecraftforge:forge:1.20.1-47.3.0" }
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "Movement+",
+            "Specification-Vendor": "NegativeStudios",
+            "Specification-Version": "1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": project.version,
+            "Implementation-Vendor": "NegativeStudios"
+        ])
+    }
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+    options.release = 17
+}
