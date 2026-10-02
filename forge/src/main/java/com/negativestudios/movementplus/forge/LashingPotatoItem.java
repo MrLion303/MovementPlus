@@ -1,6 +1,7 @@
 package com.negativestudios.movementplus.forge;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -46,12 +47,26 @@ public class LashingPotatoItem extends Item {
         Vec3 center=anchor.add(.5,.5,.5);
         Vec3 delta=center.subtract(player.position());
         double distance=delta.length();
+
         if(distance<1.35D)player.setDeltaMovement(Vec3.ZERO);
         else{
             player.setDeltaMovement(delta.normalize().scale(Math.min(1.35D,.28D+distance*.055D)));
             player.hurtMarked=true;
         }
         player.fallDistance=0.0F;
+
+        if(level.isClientSide && level.getGameTime()%2L==0L){
+            Vec3 start=player.position().add(0,player.getEyeHeight()*.75,0);
+            Vec3 line=center.subtract(start);
+            double length=line.length();
+            if(length>0.01){
+                Vec3 step=line.normalize().scale(.55);
+                for(double d=0;d<length;d+=.55){
+                    Vec3 p=start.add(step.scale(d));
+                    level.addParticle(ParticleTypes.COMPOSTER,p.x,p.y,p.z,0,.01,0);
+                }
+            }
+        }
     }
 
     private static boolean isAttached(ItemStack s){return s.hasTag()&&s.getTag().getBoolean(ATTACHED);}
