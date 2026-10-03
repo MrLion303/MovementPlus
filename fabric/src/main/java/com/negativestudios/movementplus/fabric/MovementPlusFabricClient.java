@@ -4,6 +4,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.util.Identifier;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -16,6 +18,8 @@ import org.joml.Matrix4f;
 public class MovementPlusFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        ModelPredicateProviderRegistry.register(MovementPlusFabric.LASHING_POTATO, new Identifier("minecraft", "lashing_potato_extended"),
+            (stack, world, entity, seed) -> LashingPotatoItem.state(stack) != 0 ? 1.0F : 0.0F);
         WorldRenderEvents.AFTER_ENTITIES.register(MovementPlusFabricClient::renderRope);
     }
 
