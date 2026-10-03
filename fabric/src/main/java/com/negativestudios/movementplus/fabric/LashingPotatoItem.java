@@ -10,8 +10,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -27,21 +27,21 @@ public class LashingPotatoItem extends Item {
     public LashingPotatoItem(Settings settings) { super(settings); }
 
     @Override
-    public ActionResult use(World world, PlayerEntity player, Hand hand) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         ItemStack stack=player.getStackInHand(hand);
         if (isAttached(stack)) {
             detach(stack);
             world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.PLAYERS, .8F, 1.2F);
-            return ActionResult.SUCCESS;
+            return TypedActionResult.success(stack, world.isClient);
         }
         HitResult hit=player.raycast(RANGE,0.0F,false);
-        if (!(hit instanceof BlockHitResult blockHit)) return ActionResult.PASS;
+        if (!(hit instanceof BlockHitResult blockHit)) return TypedActionResult.pass(stack);
         if (!world.isClient) {
             setAnchor(stack, blockHit.getBlockPos());
             if (!player.getAbilities().creativeMode) stack.damage(1,player,p->p.sendToolBreakStatus(hand));
         }
         world.playSound(null,player.getBlockPos(),SoundEvents.BLOCK_CHAIN_PLACE,SoundCategory.PLAYERS,.8F,1.0F);
-        return ActionResult.SUCCESS;
+        return TypedActionResult.success(stack, world.isClient);
     }
 
     @Override
