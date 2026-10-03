@@ -4,10 +4,19 @@
   "version": "${version}",
   "name": "Movement+",
   "description": "Adds the Lashing Potato grappling tool from Minecraft's 24w14potato joke snapshot to Minecraft 1.20.1.",
-  "authors": ["NegativeStudios"],
+  "authors": [
+    "NegativeStudios"
+  ],
   "license": "All Rights Reserved",
   "environment": "*",
-  "entrypoints": { "main": ["com.negativestudios.movementplus.fabric.MovementPlusFabric"] },
+  "entrypoints": {
+    "main": [
+      "com.negativestudios.movementplus.fabric.MovementPlusFabric"
+    ],
+    "client": [
+      "com.negativestudios.movementplus.fabric.MovementPlusFabricClient"
+    ]
+  },
   "depends": {
     "fabricloader": ">=0.15.0",
     "minecraft": "~1.20.1",
